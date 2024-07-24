@@ -1,0 +1,75 @@
+CREATE DATABASE LAB05
+USE LAB05
+CREATE TABLE PhongBan(
+MaPB varchar(7) PRIMARY KEY,
+TenPB nvarchar(50)
+)
+CREATE TABLE NhanVien(
+MaNV varchar(7) PRIMARY KEY,
+TenNV nvarchar(50),
+NgaySinh datetime,
+SoCMND char(9),
+GioiTinh char(1),
+DiaChi nvarchar(100),
+NgayVaoLam datetime,
+MaPB varchar(7) CONSTRAINT fk_PhongBan FOREIGN KEY REFERENCES PhongBan(MaPB)
+)
+CREATE TABLE LuongDA(
+MaDA varchar(8),
+MaNV varchar(7) CONSTRAINT fk_NhanVien FOREIGN KEY REFERENCES NhanVien(MaNV),
+NgayNhan datetime,
+SoTien money CHECK (SoTien>=0),
+CONSTRAINT pk_LuongDA PRIMARY KEY (MaDA,MaNV)
+)
+GO
+INSERT INTO PhongBan VALUES ('M01','PhongDaoTao')
+INSERT INTO PhongBan VALUES ('M02','PhongQuanLi')
+INSERT INTO PhongBan VALUES ('M03','PhongBaoVe')
+INSERT INTO PhongBan VALUES ('M04','KhoaPhongChong')
+INSERT INTO PhongBan VALUES ('M05','KhoaBieuDien')
+INSERT INTO NhanVien VALUES ('1','Seth','2000-07-24','123456789','M','Texas','2024-07-24','M01')
+INSERT INTO NhanVien VALUES ('2','Jordan','1990-05-25','987654321','F','Goldkin','2023-05-26','M02')
+INSERT INTO NhanVien VALUES ('3','Sam','1999-10-11','012345578','M','NorthWay','2020-1-1','M03')
+INSERT INTO NhanVien VALUES ('4','Mary','2001-6-5','01231415','F','RedRiver','2024-07-24','M04')
+INSERT INTO NhanVien VALUES ('5','Ames','2003-7-5','12334678','F','Unknown','2024-07-20','M05')
+INSERT INTO NhanVien VALUES ('6','Andre','1999-1-1','000011112','M','Goldkin','2020-2-3','M04')
+INSERT INTO LuongDA VALUES('1','5','2024-7-24',100)
+INSERT INTO LuongDA VALUES('2','4','2024-7-24',200)
+INSERT INTO LuongDA VALUES('3','3','2024-7-24',300)
+INSERT INTO LuongDA VALUES('4','2','2024-5-24',400)
+INSERT INTO LuongDA VALUES('5','1','2024-1-24',500)
+INSERT INTO LuongDA VALUES ('3','1','2024-7-24',500)
+INSERT INTO LuongDA VALUES ('5','6','2024-7-24',500)
+--2.
+GO
+SELECT * FROM PhongBan
+SELECT * FROM NhanVien
+SELECT * FROM LuongDA
+--3.
+GO
+SELECT * FROM NhanVien WHERE GioiTinh ='F'
+--4.
+GO
+SELECT MaDA FROM LuongDA
+--5.
+GO
+SELECT MaNV, SUM(SoTien)[TongTien] FROM LuongDA GROUP BY MaNV
+--6.
+GO
+SELECT * FROM NhanVien WHERE MaPB='M04'
+--7.
+GO
+SELECT MaNV, SUM(SoTien)[TongTienLuong] FROM LuongDA GROUP BY MaNV HAVING MaNV in(SELECT MaNV FROM NhanVien WHERE MaPB='M04')
+--8.
+GO
+SELECT A.MaPB, TenPB, SoNhanVien FROM (SELECT MaPB, COUNT(*)[SoNhanVien] FROM NhanVien GROUP BY MaPB) A INNER JOIN PhongBan ON A.MaPB = PhongBan.MaPB
+--9.
+GO
+SELECT * FROM NhanVien WHERE MaNV in (SELECT MaNV FROM LuongDA)
+--10.
+GO
+SELECT A.MaPB, TenPB, SoNhanVien FROM
+(SELECT MaPB, COUNT(*)[SoNhanVien] FROM NhanVien GROUP BY MaPB) A INNER JOIN PhongBan
+ON A.MaPB = PhongBan.MaPB ORDER BY SoNhanVien DESC
+--11.
+SELECT MaPB, COUNT(*)[SoNhanVien] FROM NhanVien GROUP BY MaPB HAVING MaPB='M04'
