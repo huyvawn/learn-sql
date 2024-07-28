@@ -52,8 +52,8 @@ SELECT * FROM Product WHERE ProductId  in (SELECT ProductId FROM OrderDetails WH
 SELECT COUNT(*) AS NumberOfCustomers FROM (SELECT DISTINCT CustomerId [A] FROM Orders) tmp
 SELECT COUNT(*) FROM Product
 --Tong don hang
-SELECT * FROM OrderDetails
+
 SELECT OrderId,CustomerName ,[Total Purchase] FROM(SELECT c.OrderId, [Total Purchase], CustomerId FROM
-(SELECT OrderId, SUM(qty*Price)[Total Purchase] FROM(SELECT qty,Price,a.OrderId,CustomerId FROM
-(SELECT * FROM OrderDetails ) a INNER JOIN Product ON a.ProductId = Product.ProductId INNER JOIN Orders on a.OrderId=Orders.OrderId) b GROUP BY OrderId) c INNER JOIN Orders on c.OrderId = Orders.OrderId)
+(SELECT OrderId, SUM(qty*Price)[Total Purchase] FROM(SELECT qty,Price,a.OrderId FROM
+(SELECT * FROM OrderDetails ) a INNER JOIN Product ON a.ProductId = Product.ProductId) b GROUP BY OrderId) c INNER JOIN Orders on c.OrderId = Orders.OrderId)
 d INNER JOIN Customer on d.CustomerId= Customer.CustomerId
