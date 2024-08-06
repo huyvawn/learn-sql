@@ -15,18 +15,22 @@ CREATE TABLE [User] (
 );
 GO 
 
--- Table: Comment
-CREATE TABLE Comment (
-    Id INT PRIMARY KEY,
-    Title VARCHAR(255),
-    Content TEXT,
-    User_id INT,
-    Product_id INT,
-    Rating INT,
-    FOREIGN KEY (User_id) REFERENCES [User](Id),
-    FOREIGN KEY (Product_id) REFERENCES Product(id)
+-- Table: ProductCategory
+CREATE TABLE ProductCategory (
+    id INT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
 );
 GO
+
+-- Table: ProductBrand
+CREATE TABLE ProductBrand (
+    id INT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    highlightProduct INT 
+);
+GO
+
 
 -- Table: Product
 CREATE TABLE Product (
@@ -45,27 +49,29 @@ CREATE TABLE Product (
     FOREIGN KEY (category) REFERENCES ProductCategory(id)
 );
 GO
---ALTER TABLE Product
---ADD quantity int
 
--- Table: ProductBrand
-CREATE TABLE ProductBrand (
-    id INT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    description TEXT,
-    highlightProduct INT FOREIGN KEY REFERENCES Product(id)
+-- Table: Comment
+CREATE TABLE Comment (
+    Id INT PRIMARY KEY,
+    Title VARCHAR(255),
+    Content TEXT,
+    User_id INT,
+    Product_id INT,
+    Rating INT,
+    FOREIGN KEY (User_id) REFERENCES [User](Id),
+    FOREIGN KEY (Product_id) REFERENCES Product(id)
 );
 GO
+
 
 --ALTER TABLE ProductBrand
 --ADD FOREIGN KEY (highlightProduct) REFERENCES Product(id)
 
--- Table: ProductCategory
-CREATE TABLE ProductCategory (
-    id INT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
-);
-GO
+
+--ALTER TABLE Product
+--ADD quantity int
+
+
 
 -- Table: Cart
 CREATE TABLE Cart (
@@ -88,6 +94,13 @@ CREATE TABLE Service (
 );
 GO
 
+-- Table: ArticleCategory
+CREATE TABLE ArticleCategory (
+    id INT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+GO
+
 -- Table: Article
 CREATE TABLE Article (
     id INT PRIMARY KEY,
@@ -100,10 +113,17 @@ CREATE TABLE Article (
 );
 GO
 
--- Table: ArticleCategory
-CREATE TABLE ArticleCategory (
-    id INT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
+-- Table: DistrictList
+CREATE TABLE DistrictList (
+    DistrictId INT PRIMARY KEY,
+    DistrictName VARCHAR(255)
+);
+GO
+
+-- Table: CityList
+CREATE TABLE CityList (
+    CityId INT PRIMARY KEY,
+    CityName VARCHAR(255)
 );
 GO
 
@@ -137,16 +157,3 @@ CREATE TABLE OrderDetails (
 );
 GO
 
--- Table: DistrictList
-CREATE TABLE DistrictList (
-    DistrictId INT PRIMARY KEY,
-    DistrictName VARCHAR(255)
-);
-GO
-
--- Table: CityList
-CREATE TABLE CityList (
-    CityId INT PRIMARY KEY,
-    CityName VARCHAR(255)
-);
-GO
